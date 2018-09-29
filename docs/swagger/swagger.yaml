@@ -1,0 +1,266 @@
+basePath: /v1/api
+definitions:
+  admins.ListSignInParam:
+    properties:
+      admin:
+        properties:
+          name:
+            example: "18717711819"
+            type: string
+          password:
+            example: xxxxxx
+            type: string
+        required:
+        - name
+        - password
+        type: object
+    type: object
+  admins.ListSignUpParam:
+    properties:
+      admin:
+        properties:
+          name:
+            example: "18717711819"
+            type: string
+          password:
+            example: xxxxx
+            type: string
+          phone:
+            example: "18717711819"
+            type: string
+        required:
+        - name
+        - password
+        - phone
+        type: object
+    type: object
+  model.AdminSerializer:
+    properties:
+      auth_token:
+        type: string
+      created_at:
+        type: string
+      encrypted_password:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      state:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.ClassSerializer:
+    properties:
+      class_desc:
+        type: string
+      class_icon:
+        type: string
+      class_name:
+        type: string
+      class_status:
+        type: integer
+      class_time:
+        type: string
+      class_vie:
+        type: integer
+      class_vis:
+        type: integer
+      create_at:
+        type: string
+      id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+host: 127.0.0.1:5005
+info:
+  contact:
+    email: dacheng@ultrachain.com
+    name: API Support
+  description: This is a server for LearnOnline-2018.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: LearnOnline-2018 API
+  version: "1.0"
+paths:
+  /accesstoken:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: version
+        in: query
+        name: Version
+        required: true
+        type: string
+      - description: seq
+        in: query
+        name: Seq
+        required: true
+        type: string
+      - description: app_id
+        in: query
+        name: AppId
+        required: true
+        type: string
+      - description: biz_type
+        in: query
+        name: BizType
+        required: true
+        type: string
+      - description: token
+        in: query
+        name: Token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token message
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: get accesstoken
+      tags:
+      - accesstoken
+  /admins/sign_in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: sign in information
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/admins.ListSignInParam'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AdminSerializer'
+            type: object
+      security:
+      - Bearer: []
+      summary: Find a count
+      tags:
+      - Admin
+  /admins/sign_up:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: sign up information
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/admins.ListSignUpParam'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AdminSerializer'
+            type: object
+      security:
+      - Bearer: []
+      summary: create a count
+      tags:
+      - Admin
+  /classes/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: name
+        in: query
+        name: classname
+        required: true
+        type: string
+      - description: time
+        in: query
+        name: classtime
+        required: true
+        type: string
+      - description: desc
+        in: query
+        name: classdesc
+        required: true
+        type: string
+      - description: icon
+        in: query
+        name: classicon
+        required: true
+        type: string
+      - description: status
+        in: query
+        name: classstatus
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success!
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: create classes
+      tags:
+      - classes
+  /classes/find:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: number
+        required: true
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: key
+        in: query
+        name: keyword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ClassSerializer'
+            type: array
+      security:
+      - Bearer: []
+      summary: List classes
+      tags:
+      - classes
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
